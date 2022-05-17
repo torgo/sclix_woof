@@ -1,0 +1,14 @@
+{
+    "name": "sclix-woof",
+    "command": "woof",
+    "version": "0.1.0",
+    "help_description": "patch ascii art",
+    "options": [
+        {
+            "name": "lang",
+            "shorthand": "l",
+            "type": "string",
+            "usage": "the language you want to show"
+        }
+    ]
+}
