@@ -42,7 +42,7 @@ $(BUILD_DIR):
 $(BUILD_DIR)/$(EXECUTABLE_NAME): $(BUILD_DIR)
 	@echo "Building..."
 	@echo "$(LOG_PREFIX) Building ( $(BUILD_DIR)/$(EXECUTABLE_NAME) )"
-	@GOOS=$(GOOS) GOARCH=$(GOARCH) $(GOCMD) build -o $(BUILD_DIR)/$(EXECUTABLE_NAME) $(WORKING_DIR)/main.go
+	@GOOS=$(GOOS) GOARCH=$(GOARCH) $(GOCMD) build -o $(BUILD_DIR)/$(EXECUTABLE_NAME) $(WORKING_DIR)/cmd/main.go
 
 .PHONY: build
 build: $(BUILD_DIR)/$(EXECUTABLE_NAME)
