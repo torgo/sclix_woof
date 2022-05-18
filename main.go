@@ -4,8 +4,12 @@ import (
 	"bufio"
 	"encoding/json"
 	"fmt"
+	"io/ioutil"
+	"log"
 	"os"
 )
+
+const EXTENSION_NAME = "sclix-woof"
 
 func main() {
 	inputString, err := ReadInput()
@@ -14,17 +18,30 @@ func main() {
 		panic(err)
 	}
 
-	input, err := ParseInput[Input](inputString)
+	input, err := ParseInput[WoofInput](inputString)
 	if err != nil {
 		fmt.Println("failed parsing input JSON to struct")
 		panic(err)
+	}
+
+	debugLogger := GetDebugLogger(input.Debug)
+
+	debugLogger.Println("input.Debug:", input.Debug)
+	debugLogger.Println("input.PoxyPort:", input.ProxyPort)
+	debugLogger.Println("input.Args.Lang:", input.Args.Lang)
+
+	// Question: if lang is not set (in InputData.Args), then we want to default to "en".
+	// Should the extension do that here in code?
+	// Or should it be part of the extension lib (`ParseInput`) in concert with reading the extension.json file?
+	if input.Args.Lang == "" {
+		input.Args.Lang = "en"
 	}
 
 	lang := input.Args.Lang
 	fmt.Println("Woof in", lang)
 }
 
-type Input struct {
+type WoofInput struct {
 	Lang string `json:"lang"`
 }
 
@@ -33,15 +50,16 @@ type Input struct {
 ///////////////////////////////////////////////////////////////////////////////
 
 type InputData[T any] struct {
-	// TODO: what standard stuff needs to go here?
-	ProxyPort int `json:"proxyPort"`
+	// Standard stuff do we want to passed to all extensions
+	Debug     bool `json:"debug"`
+	ProxyPort int  `json:"proxyPort"`
 
 	// Extension-specific args
 	Args T `json:"args"`
 }
 
-func GetInputArgs() *Input {
-	var args Input
+func GetInputArgs() *WoofInput {
+	var args WoofInput
 	args.Lang = "en"
 	return &args
 }
@@ -76,6 +94,8 @@ func ReadInput() (string, error) {
 	return inputString, nil
 }
 
+// Question: should this fail (return an error) if certain mandatory fields are missing?
+// For example, the proxy port?
 func ParseInput[T any](inputString string) (*InputData[T], error) {
 	rawBytes := []byte(inputString)
 
@@ -86,4 +106,16 @@ func ParseInput[T any](inputString string) (*InputData[T], error) {
 	}
 
 	return &input, nil
+}
+
+// Question: This uses the EXTENSION_NAME constant. Nothing currently forces that constant to be in sync with extension.json.
+// How should we enforce this? We could load it from the extension.json file? Or we could do it with some kind of lint check
+// when we build it.
+func GetDebugLogger(debug bool) *log.Logger {
+	logPrefix := fmt.Sprintf("[%s] ", EXTENSION_NAME)
+	debugLogger := log.New(os.Stderr, logPrefix, log.Ldate|log.Ltime|log.Lmicroseconds|log.Lshortfile)
+	if !debug {
+		debugLogger.SetOutput(ioutil.Discard)
+	}
+	return debugLogger
 }
