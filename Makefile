@@ -47,12 +47,17 @@ $(BUILD_DIR)/$(EXECUTABLE_NAME): $(BUILD_DIR)
 .PHONY: build
 build: $(BUILD_DIR)/$(EXECUTABLE_NAME)
 
+.PHONY: test
+test: 
+	@echo "Testing..."
+
 .PHONY: help
 help:
 	@echo "Main targets:"
 	@echo "$(LOG_PREFIX) format"
 	@echo "$(LOG_PREFIX) lint"
 	@echo "$(LOG_PREFIX) build"
+	@echo "$(LOG_PREFIX) test"
 	@echo "$(LOG_PREFIX) clean"
 	@echo "\nAvailable parameter:"
 	@echo "$(LOG_PREFIX) GOOS                       Specify Operating System to compile for (see golang GOOS, default=$(GOOS))"
