@@ -29,10 +29,7 @@ func ReadInput() (string, error) {
 	for {
 		char, _, err := reader.ReadRune()
 		if err != nil {
-			// assuming this is EOF, but should probably verify at some point!
-			// TODO: check if this is an EOF
-			// if so, break
-			// if not return "", err
+			// this may just be EOF so don't propagate the error
 			break
 		}
 		if char == '\n' {
