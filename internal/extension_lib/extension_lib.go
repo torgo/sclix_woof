@@ -12,7 +12,7 @@ import (
 	"path/filepath"
 )
 
-type InputData[T any] struct {
+type ExtensionInput[T any] struct {
 	// Standard stuff do we want to passed to all extensions
 	Debug     bool `json:"debug"`
 	ProxyPort int  `json:"proxyPort"`
@@ -48,12 +48,10 @@ func ReadInput() (string, error) {
 	return inputString, nil
 }
 
-// Question: should this fail (return an error) if certain mandatory fields are missing?
-// For example, the proxy port?
-func ParseInput[T any](inputString string) (*InputData[T], error) {
+func ParseInput[T any](inputString string) (*ExtensionInput[T], error) {
 	rawBytes := []byte(inputString)
 
-	var input InputData[T]
+	var input ExtensionInput[T]
 	err := json.Unmarshal(rawBytes, &input)
 	if err != nil {
 		return nil, err
@@ -71,13 +69,17 @@ func GetDebugLogger(debug bool, extensionName string) *log.Logger {
 	return debugLogger
 }
 
-func DeserExtensionMetadata() (*extension_metadata.ExtensionMetadata, error) {
+func GetExtensionRoot() (string, error) {
 	exPath, err := os.Executable()
 	if err != nil {
-		return nil, err
+		return "", err
 	}
 	dirPath := filepath.Dir(exPath)
-	extensionMetadataFile := path.Join(dirPath, "extension.json")
+	return dirPath, nil
+}
+
+func DeserExtensionMetadata(extensionRoot string) (*extension_metadata.ExtensionMetadata, error) {
+	extensionMetadataFile := path.Join(extensionRoot, "extension.json")
 
 	bytes, err := os.ReadFile(extensionMetadataFile)
 	if err != nil {
@@ -91,4 +93,12 @@ func DeserExtensionMetadata() (*extension_metadata.ExtensionMetadata, error) {
 	}
 
 	return &extMeta, nil
+}
+
+func LoadExtensionMetadata() (*extension_metadata.ExtensionMetadata, error) {
+	extensionRoot, err := GetExtensionRoot()
+	if err != nil {
+		return nil, err
+	}
+	return DeserExtensionMetadata(extensionRoot)
 }
