@@ -18,12 +18,6 @@ type InputData[T any] struct {
 	Args T `json:"args"`
 }
 
-// func GetInputArgs() *WoofInput {
-// 	var args WoofInput
-// 	args.Lang = "en"
-// 	return &args
-// }
-
 func ReadInput() (string, error) {
 	reader := bufio.NewReader(os.Stdin)
 	consecutiveNewlinesCount := 0
