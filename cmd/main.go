@@ -3,11 +3,19 @@ package main
 import (
 	"fmt"
 	"github.com/snyk/sclix-woof/internal/extension_lib"
+	"os"
 )
 
 const EXTENSION_NAME = "sclix-woof"
 
 func main() {
+	extMeta, err := extension_lib.DeserExtensionMetadata()
+	if err != nil {
+		fmt.Println("failed deserializing extension metadata:", err)
+		os.Exit(1)
+	}
+	extensionName := extMeta.Name
+
 	inputString, err := extension_lib.ReadInput()
 	if err != nil {
 		fmt.Println("failed reading input")
@@ -20,8 +28,8 @@ func main() {
 		panic(err)
 	}
 
-	debugLogger := extension_lib.GetDebugLogger(input.Debug, EXTENSION_NAME)
-
+	debugLogger := extension_lib.GetDebugLogger(input.Debug, extensionName)
+	debugLogger.Println("extension name:", extensionName)
 	debugLogger.Println("input.Debug:", input.Debug)
 	debugLogger.Println("input.PoxyPort:", input.ProxyPort)
 	debugLogger.Println("input.Args.Lang:", input.Args.Lang)

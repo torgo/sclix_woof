@@ -4,9 +4,12 @@ import (
 	"bufio"
 	"encoding/json"
 	"fmt"
+	"github.com/snyk/cli/cliv2/exported/extension_metadata"
 	"io/ioutil"
 	"log"
 	"os"
+	"path"
+	"path/filepath"
 )
 
 type InputData[T any] struct {
@@ -62,9 +65,6 @@ func ParseInput[T any](inputString string) (*InputData[T], error) {
 	return &input, nil
 }
 
-// Question: This uses the EXTENSION_NAME constant. Nothing currently forces that constant to be in sync with extension.json.
-// How should we enforce this? We could load it from the extension.json file? Or we could do it with some kind of lint check
-// when we build it.
 func GetDebugLogger(debug bool, extensionName string) *log.Logger {
 	logPrefix := fmt.Sprintf("[%s] ", extensionName)
 	debugLogger := log.New(os.Stderr, logPrefix, log.Ldate|log.Ltime|log.Lmicroseconds|log.Lshortfile)
@@ -72,4 +72,26 @@ func GetDebugLogger(debug bool, extensionName string) *log.Logger {
 		debugLogger.SetOutput(ioutil.Discard)
 	}
 	return debugLogger
+}
+
+func DeserExtensionMetadata() (*extension_metadata.ExtensionMetadata, error) {
+	exPath, err := os.Executable()
+	if err != nil {
+		return nil, err
+	}
+	dirPath := filepath.Dir(exPath)
+	extensionMetadataFile := path.Join(dirPath, "extension.json")
+
+	bytes, err := os.ReadFile(extensionMetadataFile)
+	if err != nil {
+		return nil, err
+	}
+
+	var extMeta extension_metadata.ExtensionMetadata
+	err = json.Unmarshal(bytes, &extMeta)
+	if err != nil {
+		return nil, err
+	}
+
+	return &extMeta, nil
 }
