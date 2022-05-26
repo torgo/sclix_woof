@@ -1,3 +1,5 @@
+github.com/snyk/cli-extension-lib-go v0.0.1 h1:0AnvrmwZSbvhpg0Qrke1sRYE/D7Cz8q9VWXCJ8+uMmE=
+github.com/snyk/cli-extension-lib-go v0.0.1/go.mod h1:/CLh4Q94GRCgioMtViEr9eOULgxFezvJAEWLHECLa0w=
 github.com/snyk/cli/cliv2 v0.0.0-20220519133809-f8adccdf8c8f h1:6RZG9hMkig1SOBj8sqsvxPN281IV6nfeV7q6iaxGxz0=
 github.com/snyk/cli/cliv2 v0.0.0-20220519133809-f8adccdf8c8f/go.mod h1:f5PR94UH5XC4ttlpoZec214YEbdXBPzBy+2pi9I6ATY=
 github.com/spf13/pflag v1.0.5 h1:iy+VFUOCP1a+8yFto/drg2CJ5u0yRoB7fZw3DKv/JXA=
