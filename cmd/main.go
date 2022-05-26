@@ -2,33 +2,38 @@ package main
 
 import (
 	"fmt"
-	"github.com/snyk/sclix-woof/internal/extension_lib"
+	"github.com/snyk/cli-extension-lib-go"
 	"os"
 )
 
 const EXTENSION_NAME = "sclix-woof"
 
 func main() {
-	extMeta, err := extension_lib.DeserExtensionMetadata()
+	extensionRoot, err := cli_extension_lib_go.GetExtensionRoot()
+	if err != nil {
+		fmt.Println("failed to get extension root:", err)
+		os.Exit(1)
+	}
+	extMeta, err := cli_extension_lib_go.DeserExtensionMetadata(extensionRoot)
 	if err != nil {
 		fmt.Println("failed deserializing extension metadata:", err)
 		os.Exit(1)
 	}
 	extensionName := extMeta.Name
 
-	inputString, err := extension_lib.ReadInput()
+	inputString, err := cli_extension_lib_go.ReadInput()
 	if err != nil {
 		fmt.Println("failed reading input")
 		panic(err)
 	}
 
-	input, err := extension_lib.ParseInput[WoofInput](inputString)
+	input, err := cli_extension_lib_go.ParseInput[WoofInput](inputString)
 	if err != nil {
 		fmt.Println("failed parsing input JSON to struct")
 		panic(err)
 	}
 
-	debugLogger := extension_lib.GetDebugLogger(input.Debug, extensionName)
+	debugLogger := cli_extension_lib_go.GetDebugLogger(input.Debug, extensionName)
 	debugLogger.Println("extension name:", extensionName)
 	debugLogger.Println("input.Debug:", input.Debug)
 	debugLogger.Println("input.PoxyPort:", input.ProxyPort)
