@@ -1,9 +1,11 @@
 package main
 
 import (
+	"bufio"
 	"fmt"
 	"github.com/snyk/cli-extension-lib-go"
 	"os"
+	"path"
 )
 
 func main() {
@@ -12,14 +14,16 @@ func main() {
 		fmt.Println("failed to get extension root:", err)
 		os.Exit(1)
 	}
-	extMeta, err := cli_extension_lib_go.DeserExtensionMetadata(extensionRoot)
+	extensionMetadataPath := path.Join(extensionRoot, "extension.json")
+	extMeta, err := cli_extension_lib_go.DeserExtensionMetadata(extensionMetadataPath)
 	if err != nil {
-		fmt.Println("failed deserializing extension metadata:", err)
+		fmt.Println("failed deserializing extension metadata file:", err)
 		os.Exit(1)
 	}
 	extensionName := extMeta.Name
 
-	inputString, err := cli_extension_lib_go.ReadInput()
+	stdinReader := bufio.NewReader(os.Stdin)
+	inputString, err := cli_extension_lib_go.ReadInput(stdinReader)
 	if err != nil {
 		fmt.Println("failed reading input")
 		panic(err)
@@ -36,13 +40,6 @@ func main() {
 	debugLogger.Println("input.Debug:", input.Debug)
 	debugLogger.Println("input.PoxyPort:", input.ProxyPort)
 	debugLogger.Println("input.Args.Lang:", input.Args.Lang)
-
-	// Question: if lang is not set (in InputData.Args), then we want to default to "en".
-	// Should the extension do that here in code?
-	// Or should it be part of the extension lib (`ParseInput`) in concert with reading the extension.json file?
-	if input.Args.Lang == "" {
-		input.Args.Lang = "en"
-	}
 
 	lang := input.Args.Lang
 	fmt.Println("Woof in", lang)
