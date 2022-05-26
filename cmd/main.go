@@ -6,8 +6,6 @@ import (
 	"os"
 )
 
-const EXTENSION_NAME = "sclix-woof"
-
 func main() {
 	extensionRoot, err := cli_extension_lib_go.GetExtensionRoot()
 	if err != nil {
