@@ -42,10 +42,14 @@ $(BUILD_DIR):
 $(BUILD_DIR)/$(EXECUTABLE_NAME): $(BUILD_DIR)
 	@echo "Building..."
 	@echo "$(LOG_PREFIX) Building ( $(BUILD_DIR)/$(EXECUTABLE_NAME) )"
-	@GOOS=$(GOOS) GOARCH=$(GOARCH) $(GOCMD) build -o $(BUILD_DIR)/$(EXECUTABLE_NAME) $(WORKING_DIR)/main.go
+	@GOOS=$(GOOS) GOARCH=$(GOARCH) $(GOCMD) build -o $(BUILD_DIR)/$(EXECUTABLE_NAME) $(WORKING_DIR)/cmd/main.go
 
 .PHONY: build
 build: $(BUILD_DIR)/$(EXECUTABLE_NAME)
+
+.PHONY: test
+test: 
+	@echo "Testing..."
 
 .PHONY: help
 help:
@@ -53,6 +57,7 @@ help:
 	@echo "$(LOG_PREFIX) format"
 	@echo "$(LOG_PREFIX) lint"
 	@echo "$(LOG_PREFIX) build"
+	@echo "$(LOG_PREFIX) test"
 	@echo "$(LOG_PREFIX) clean"
 	@echo "\nAvailable parameter:"
 	@echo "$(LOG_PREFIX) GOOS                       Specify Operating System to compile for (see golang GOOS, default=$(GOOS))"

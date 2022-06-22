@@ -15,3 +15,5 @@ Specifically, the following files should be generated in the appropriate situati
 | linux     | amd64    | <extension-name>_linux_amd64     |                                                         |
 | linux     | arm64    | <extension-name>_linux_arm64     |                                                         |
 | windows   | amd64    | <extension-name>_windows_arm64   |                                                         |
+
+The makefile must also have `make test` target which runs any tests and exists with a zero exit code on success.
