@@ -1,4 +1,4 @@
-# sclix-woof
+# sclix_woof
 
 ## Building an extension
 

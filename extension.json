@@ -1,5 +1,5 @@
 {
-    "name": "sclix-woof",
+    "name": "sclix_woof",
     "command": "woof",
     "version": "0.1.0",
     "description": "patch ascii art",

@@ -16,7 +16,7 @@ ifeq ($(GOOS),windows)
 endif
 
 # some globally assembled variables
-APPLICATION_NAME = sclix-woof
+APPLICATION_NAME = sclix_woof
 PLATFORM_STRING = $(GOOS)$(_SEPARATOR)$(GOARCH)
 EXECUTABLE_NAME = $(APPLICATION_NAME)$(_SEPARATOR)$(PLATFORM_STRING)$(_EXE_POSTFIX)
 

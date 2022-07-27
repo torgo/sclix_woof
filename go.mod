@@ -1,4 +1,4 @@
-module github.com/snyk/sclix-woof
+module github.com/snyk/sclix_woof
 
 go 1.18
 
