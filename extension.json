@@ -1,15 +1,17 @@
 {
     "name": "sclix_woof",
-    "command": "woof",
     "version": "0.1.0",
     "description": "patch ascii art",
-    "options": [
-        {
+    "command": {
+        "name": "woof",
+        "description": "output patch ascii art",
+        "options": [{
             "name": "lang",
             "shorthand": "l",
             "type": "string",
-            "default": "en",
-            "description": "the language you want to show"
-        }
-    ]
+            "description": "the language you want to woof in",
+            "required": false,
+            "default": "default-lang"
+        }]
+    }
 }

@@ -16,9 +16,14 @@ ifeq ($(GOOS),windows)
 endif
 
 # some globally assembled variables
-APPLICATION_NAME = sclix_woof
+APPLICATION_NAME = ""$(shell basename -s .git `git config --get remote.origin.url`)""
 PLATFORM_STRING = $(GOOS)$(_SEPARATOR)$(GOARCH)
 EXECUTABLE_NAME = $(APPLICATION_NAME)$(_SEPARATOR)$(PLATFORM_STRING)$(_EXE_POSTFIX)
+
+# Make directories per convention
+prefix = /usr/local
+exec_prefix = $(prefix)
+bindir = $(exec_prefix)
 
 # some make file variables
 LOG_PREFIX = --
@@ -46,10 +51,22 @@ $(BUILD_DIR)/$(EXECUTABLE_NAME): $(BUILD_DIR)
 
 .PHONY: build
 build: $(BUILD_DIR)/$(EXECUTABLE_NAME)
+# suppress "Nothing to be done for `build'."
+	@echo > /dev/null 
 
 .PHONY: test
 test: 
-	@echo "Testing..."
+	@echo "$(LOG_PREFIX) Testing"
+	@$(GOCMD) test -cover ./...
+
+$(DESTDIR)$(bindir):
+	@mkdir -p $(DESTDIR)$(bindir)
+
+.PHONY: install
+install: $(DESTDIR)$(bindir) build
+	@echo "$(LOG_PREFIX) Installing $(V2_EXECUTABLE_NAME) ( $(DESTDIR)$(bindir) )"
+	@cp $(BUILD_DIR)/$(EXECUTABLE_NAME) $(DESTDIR)$(bindir)
+	@cp ./extension.json $(DESTDIR)$(bindir)
 
 .PHONY: help
 help:
