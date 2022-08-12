@@ -53,3 +53,6 @@ jobs:
 
       - name: Show output folder
         run: ls -la _bin
+
+      - name: Run make test
+        run: make test
