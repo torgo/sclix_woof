@@ -3,7 +3,7 @@
     "version": "0.1.0",
     "description": "patch ascii art",
     "command": {
-        "name": "woof",
+        "name": "woof2",
         "description": "output patch ascii art",
         "options": [{
             "name": "lang",
