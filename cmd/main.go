@@ -22,5 +22,5 @@ func main() {
 		os.Exit(1)
 	}
 	fmt.Println("Woof in", lang)
-	fmt.Println("Woof token:", extensionInput.Token)
+	fmt.Println("Woof2 token:", extensionInput.Token)
 }
