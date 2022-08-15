@@ -1,2 +1,5 @@
 sclix_woof_darwin_arm64
 _bin
+bin/extension.json
+bin/sclix_woof_darwin_amd64
+snyk_darwin_amd64
